@@ -1,0 +1,20 @@
+{
+  "name": "devtinder-b.e",
+  "version": "1.0.0",
+  "description": "Tinder for Devs (for learning internally)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "node.js",
+    "javascript"
+  ],
+  "author": "Geetha Vijayan",
+  "license": "ISC",
+  "dependencies": {
+    "express.js": "^1.0.0"   
+  }
+}
