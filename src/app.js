@@ -23,13 +23,13 @@ obviously all route starts with / so it will override all routes starts with /te
 
 
 
-app.use("/",(req,res)=>{
-    console.log("incoming request");
-    console.log(req.url);
-    console.log(req.method);
-    console.log(req.headers);
-    res.send("Hello from express.js");
-})
+// app.use("/",(req,res)=>{
+//     console.log("incoming request");
+//     console.log(req.url);
+//     console.log(req.method);
+//     console.log(req.headers);
+//     res.send("Hello from express.js");
+// })
 
 /***
  * Get call and post call
@@ -39,9 +39,30 @@ app.use("/",(req,res)=>{
  *  post call to profile is used to send data to server(while signing we give profile detaails)
  */
 
-app.get("/profile",(req,res)=>{
-    res.send({firstname: "John", lastname: "Doe"});
-});
+app.get("/profile",
+    (req,res,next)=>{
+    console.log("🔥 PROFILE ROUTE");
+    //console.log("QUERY:", req.query);
+        res.send({firstname: "John", lastname: "Doe"});
+     next();
+    },
+    (req,res,next)=>{
+        console.log("🔥 PROFILE ROUTE 2");
+        res.send("profile Details Saved Successfully");
+        next();
+    },
+    [ (req,res,next)=>{
+    console.log("🔥 PROFILE ROUTE 3");
+    //console.log("QUERY:", req.query);
+        res.send({firstname: "John", lastname: "Doe"});
+     next();
+    }, (req,res,next)=>{
+    console.log("🔥 PROFILE ROUTE 4");
+    //console.log("QUERY:", req.query);
+        res.send({firstname: "John", lastname: "Doe"});
+     next();
+    },]
+);
 app.post("/profile",(req,res)=>{
     res.send("profile saved");
 });
