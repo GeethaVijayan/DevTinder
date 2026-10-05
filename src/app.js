@@ -1,6 +1,7 @@
 const express = require('express');
 
 const app = express(); //new instance of express
+const {adminAuth,userAuth} = require("./middleware/authRoutes");
 
 /**
  * how to handle codde 
@@ -12,9 +13,15 @@ const app = express(); //new instance of express
 
 //this app.use is known as request handler. it will handle all incoming requests to the server
 
-app.use("/testroute",(req,res)=>{
-    res.send("Hello from routehandler");
-});
+// app.use("/testroute",(req,res)=>{
+//     res.send("Hello from routehandler");
+// });
+
+
+//handle auth middleware
+ //it wwon't go to other routes itself
+app.use("/auth", adminAuth);
+app.use("/user", userAuth);
 /*this is a middleware function which will handle all incoming requests to the server,any code which is passing over this route matching with / ot will gives this response 
 obviously all route starts with / so it will override all routes starts with /test,/hello it will give same response (wildcard route)*/
 
@@ -39,7 +46,7 @@ obviously all route starts with / so it will override all routes starts with /te
  *  post call to profile is used to send data to server(while signing we give profile detaails)
  */
 
-app.get("/profile",
+app.get("/user/profile",
     (req,res,next)=>{
     console.log("🔥 PROFILE ROUTE");
     //console.log("QUERY:", req.query);
@@ -63,11 +70,15 @@ app.get("/profile",
      next();
     },]
 );
-app.post("/profile",(req,res)=>{
+app.post("/auth/admin",(req,res)=>{
     res.send("profile saved");
 });
-app.delete("/profile",(req,res)=>{
-    res.send("profile deleted");
+app.delete("/auth/admin",(req,res)=>{
+    res.send("admin profile deleted");
+});
+
+app.get("/auth/admin",(req,res)=>{
+        res.send("auth is scuccessful");
 });
 //order of apicall matters alot
  
