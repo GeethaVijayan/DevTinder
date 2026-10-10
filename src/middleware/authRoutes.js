@@ -1,5 +1,5 @@
  const adminAuth = (req,res,next)=>{
-    const token = "xyz";
+    const token = "xyzdnlkn";
     const admin = token === "xyz";
     if(admin){
         next();

@@ -15,6 +15,7 @@
   "author": "Geetha Vijayan",
   "license": "ISC",
   "dependencies": {
-    "express.js": "^1.0.0"   
+    "express.js": "^1.0.0",
+    "mongoose": "^9.11.0"
   }
 }
