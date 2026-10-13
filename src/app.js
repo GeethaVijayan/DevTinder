@@ -12,26 +12,146 @@ connectDB().then(()=>{
     process.exit(1);
 })
 
-
+app.use(express.json()); //middleware to parse json data from request body(converts request json data into javasrcipt object for further use)
+    // const user = new User( {
 app.post('/signup',async (req,res)=>{
-    const user = new User( {
-        firstName:'John',
-        lastName:'Doe',
-        email:'john.doe@gmail.com',
-        age:35,
-        gender:"male"
-    })
-    
+   
+    console.log("Request body", req.body);
      //whenever we do any db operations best practice is to add try catch block 
      try{
+        const user = new User(req.body);
     await user.save();
      res.send("User added successfully");
      }catch(err){
         console.log("Error while saving user", err);
-        res.status(400).send("Error occurred while saving user",err);
+        res.status(500).json({message:"Internal server error"});
      }
 })
  
+//feed api - geet all users from db
+app.get('/feed',async (req,res)=>{
+    try{
+        const users = await User.find();
+        res.send(users);
+    }catch(err){
+        console.log("Error while fetching users", err);
+        res.status(500).json({message:"Internal server error"});
+    }
+});
+
+//get user by email
+app.get('/user',async (req,res)=>{
+    const email = req.body.email;
+
+    try{
+         const user = await User.findOne({email:email}).exec();
+         if(!user){
+            res.status(404).send("user not found");
+         }else{
+            res.send(user);
+         }
+    }catch(err){
+         res.status(500).send("user not found");
+    }
+
+});
+
+//get user by id
+app.get('/user',async (req,res)=>{
+    const email = req.body.email;
+
+    try{
+         const user = await User.findById({email:email}).exec();
+         if(!user){
+            res.status(404).send("user not found");
+         }else{
+            res.send(user);
+         }
+    }catch(err){
+         res.status(500).send("user not found");
+    }
+
+});
+
+//get all users
+
+app.get('/user',async (req,res)=>{
+    const email = req.body.email;
+
+    try{
+         const user = await User.findOne();
+         res.send (user);
+         if(!user){
+            res.status(404).send("user not found");
+         }else{
+            res.send(user);
+         }
+    }catch(err){
+         res.status(500).send("user not found");
+    }
+
+});
+
+app.delete('/user',async (req,res)=>{
+    const userId = req.body.userId;
+    console.log("userId", userId);
+    try{
+            const user = await User.findByIdAndDelete({_id:userId});
+            if(!user){
+                res.status(404).send("user not found");
+            }else{
+                res.send("user deleted successfully");
+            }
+    }catch(err){
+        res.status(500).send("Error while deleting user");
+    }
+})
+
+// app.patch('/user',async (req,res)=>{
+//     // const userId = req.body.userId;
+//     // const data = req.body;
+//     console.log("Request body", req.body);
+//     const {userId,...data} = req.body;
+//     console.log("userId", userId);
+//     console.log("data", data);
+//       try{
+//         const user = await User.findByIdAndUpdate({_id:userId},data,{ new: true, runValidators: true });
+//         if(!user){
+//             res.status(404).send("user not found");
+//         }else{
+//             res.send(user);
+//         }
+//       }catch(err){
+//         res.status(500).send("Error while updating user");
+//       }
+// })
+
+app.patch('/user', async (req, res) => {
+    console.log("Request body:", req.body);
+    const { userId, ...data } = req.body;
+
+    console.log("userId:", userId);
+    console.log("data:", data);
+
+    try {
+       const user = await User.findByIdAndUpdate(
+    userId,
+    data,
+    { returnDocument: 'after', runValidators: true }
+);
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        return res.status(200).json(user);
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send("Error while updating user: " + err.message);
+    }
+});
+
 /**i need to listen to any port so i can get to know what request is coming */
 
 app.listen(9000,()=>{

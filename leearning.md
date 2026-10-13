@@ -57,3 +57,33 @@ in our project local
   create Post/signup API to add data to db (save the data)
   Pushh some documents using API calls from postman
   Error handling using try,catch (always handle error handling using try catch)
+  
+  difference between javascript and JSON
+  Add express.json middleware data for conversion of json(") into js object 
+  make your signup api dynmaaic to receive data from anywhere(dynamic data in signup)
+  findOne() - it will find based on conditions eg: it will find emailid which is matching but what if we give 2 similar emailId the condition will return find which emailId matching object - soln to avoid these conditions we are adding unique in schema description under {email:"geetha", unique:"true",required:"true"}
+  //GET API
+  Feed API
+  Creaet a api where you can get userbyId
+  Method	What it returns
+findOne({ email })	-One matching document
+find({ email }) -	All matching documents
+findOne({}) -	One document without filtering
+find({})=	All documents without filtering
+
+if you are querying by id use findById(),findlatest()
+GET API based on email
+FEED APPI (All Api)
+Get user by Id
+create a delete user API
+Difference between Patch and Update  (findByIdAndUpdate & findOneAndUpdate)
+Explore the mongoose documentations for model methods
+what are the options in model.findoneAndupdatemethod and explore more about it
+API update the user wiith emailid
+
+Explore SchemaType options from from the documentation
+add required,unique,minimum,lowercase,minlength,trim
+Add default
+create a custom validate function for gender 
+improve db schema -put all appropriate validations on each field in schema 
+Add timestamps for the schema
