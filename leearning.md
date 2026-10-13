@@ -87,3 +87,9 @@ Add default
 create a custom validate function for gender 
 improve db schema -put all appropriate validations on each field in schema 
 Add timestamps for the schema
+
+//API level validations on PATCH and Post(signup) request
+//Data Sanitizing - Add API validation for each field 
+(this is api level sanitiation before reaching into Db)
+Install Validator(npm install Validator)
+Explore validator functions and use validator functions for password, email,photourl

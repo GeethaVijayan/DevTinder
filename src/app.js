@@ -19,6 +19,7 @@ app.post('/signup',async (req,res)=>{
     console.log("Request body", req.body);
      //whenever we do any db operations best practice is to add try catch block 
      try{
+        
         const user = new User(req.body);
     await user.save();
      res.send("User added successfully");
@@ -126,33 +127,38 @@ app.delete('/user',async (req,res)=>{
 //       }
 // })
 
-app.patch('/user', async (req, res) => {
-    console.log("Request body:", req.body);
-    const { userId, ...data } = req.body;
 
-    console.log("userId:", userId);
-    console.log("data:", data);
 
+/**i need to listen to any  port so i can get to know what request is coming */
+ app.patch('/user/:userId', async (req, res) => {
+    console.log("Request body:", req.params);
+    const userId = req.params?.userId;
+    const data = req.body;
     try {
+    const ALLOWED_UPDATES = [ 'age', 'gender', 'photoUrl','skills','about','userId'];
+    const isAllowedUpdates = Object.keys(data).every((key) => ALLOWED_UPDATES.includes(key));
+
+    if(!isAllowedUpdates) {
+       throw new Error("Invalid updates-Update Not allowed");
+    }
+
+    if(!Array.isArray(data.skills) && data.skills !== undefined && data.skills.length < 10) {
+        throw new Error("Skills must be an array and within limit 10");
+    }
        const user = await User.findByIdAndUpdate(
     userId,
     data,
     { returnDocument: 'after', runValidators: true }
 );
-
         if (!user) {
             return res.status(404).send("User not found");
         }
-
         return res.status(200).json(user);
-
     } catch (err) {
         console.error(err);
         return res.status(500).send("Error while updating user: " + err.message);
     }
 });
-
-/**i need to listen to any port so i can get to know what request is coming */
 
 app.listen(9000,()=>{
     console.log("server is successfully running on port 9000");
