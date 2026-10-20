@@ -16,13 +16,13 @@ const userAuth = async (req,res,next) =>{
     const decodeMsg = await jwt.verify(token,"DevTinder@Secretkey$")
     const {_id} = decodeMsg;
     
-    const user = User.findById(_id);
+    const user = await User.findById(_id);
      if(!user){
         throw new Error("user not found")
      }
      req.user = user
      //since it is a middleware we are using next(once response is success next will go to request hanlder nd calls the appropriate function)
-     next(user)
+     next()
 
     }catch(err){
         res.status(400).send("ERROR"+err)

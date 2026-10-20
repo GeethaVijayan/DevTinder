@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const validator = require("validator")
 const cookieParser = require("cookie-parser") //it reads cookie or say parse the cookies nnut once we clear cookies it shows {} 
 const jwt = require("jsonwebtoken")
-const userAuth = require("../src/middleware/auth")
+const {userAuth} = require("../src/middleware/auth")
 
 //first conect to database and then start listening  the server(order-mateters)
 
@@ -82,7 +82,7 @@ try{
           */
          //Create a JWT Token 
          //we are hiding this information (eg:user id in the token ) and also giving secret key
-         const token = await jwt.sign({_id:user._id},"DevTinder@Secretkey$");
+         const token = await jwt.sign({_id:user._id},"DevTinder@Secretkey$",{expiresIn:"7d"});
          console.log(token,'token')
 
          /* * 
@@ -92,7 +92,7 @@ try{
 
       
 
-         res.cookie("token",token);
+         res.cookie("token",token,{httpOnly:true}, {expires:new Date(Date.now()+8*360000)});
           res.send("Login successful")
       } else{
         throw new Error("Password iss not matched")
@@ -140,153 +140,20 @@ app.get("/profile",userAuth,async (req,res)=>{
 
     //  }
 
-    
-
     /**with auth middleware */
     const user = req.user;
-    res.send(user);
-
+    res.status(200).send(user);
    }catch(err){
-    res.status(400).send("ERROR MESSAGE"+err)
+    res.status(400).send("ERROR MESSAGE"+ err)
    }
 })
 
-app.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find();
-    res.send(users);
-  } catch (err) {
-    console.log("Error while fetching users", err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+app.post('/SendConnectionRequest',userAuth, async (req,res)=>{
+  console.log("inside connectionrequest")
+  const user = req.user;
+  res.status(200).send( user.firstName +"SendConnectionRequest sent")
+})
 
-//get user by email
-app.get("/user", async (req, res) => {
-  const email = req.body.email;
-
-  try {
-    const user = await User.findOne({ email: email }).exec();
-    if (!user) {
-      res.status(404).send("user not found");
-    } else {
-      res.send(user);
-    }
-  } catch (err) {
-    res.status(500).send("user not found");
-  }
-});
-
-//get user by id
-app.get("/user", async (req, res) => {
-  const email = req.body.email;
-
-  try {
-    const user = await User.findById({ email: email }).exec();
-    if (!user) {
-      res.status(404).send("user not found");
-    } else {
-      res.send(user);
-    }
-  } catch (err) {
-    res.status(500).send("user not found");
-  }
-});
-
-//get all users
-
-app.get("/user", async (req, res) => {
-  const email = req.body.email;
-
-  try {
-    const user = await User.findOne();
-    res.send(user);
-    if (!user) {
-      res.status(404).send("user not found");
-    } else {
-      res.send(user);
-    }
-  } catch (err) {
-    res.status(500).send("user not found");
-  }
-});
-
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  console.log("userId", userId);
-  try {
-    const user = await User.findByIdAndDelete({ _id: userId });
-    if (!user) {
-      res.status(404).send("user not found");
-    } else {
-      res.send("user deleted successfully");
-    }
-  } catch (err) {
-    res.status(500).send("Error while deleting user");
-  }
-});
-
-// app.patch('/user',async (req,res)=>{
-//     // const userId = req.body.userId;
-//     // const data = req.body;
-//     console.log("Request body", req.body);
-//     const {userId,...data} = req.body;
-//     console.log("userId", userId);
-//     console.log("data", data);
-//       try{
-//         const user = await User.findByIdAndUpdate({_id:userId},data,{ new: true, runValidators: true });
-//         if(!user){
-//             res.status(404).send("user not found");
-//         }else{
-//             res.send(user);
-//         }
-//       }catch(err){
-//         res.status(500).send("Error while updating user");
-//       }
-// })
-
-/**i need to listen to any  port so i can get to know what request is coming */
-app.patch("/user/:userId", async (req, res) => {
-  console.log("Request body:", req.params);
-  const userId = req.params?.userId;
-  const data = req.body;
-  try {
-    const ALLOWED_UPDATES = [
-      "age",
-      "gender",
-      "photoUrl",
-      "skills",
-      "about",
-      "userId",
-    ];
-    const isAllowedUpdates = Object.keys(data).every((key) =>
-      ALLOWED_UPDATES.includes(key),
-    );
-
-    if (!isAllowedUpdates) {
-      throw new Error("Invalid updates-Update Not allowed");
-    }
-
-    if (
-      !Array.isArray(data.skills) &&
-      data.skills !== undefined &&
-      data.skills.length < 10
-    ) {
-      throw new Error("Skills must be an array and within limit 10");
-    }
-    const user = await User.findByIdAndUpdate(userId, data, {
-      returnDocument: "after",
-      runValidators: true,
-    });
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    return res.status(200).json(user);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).send("Error while updating user: " + err.message);
-  }
-});
 
 app.listen(9000, () => {
   console.log("server is successfully running on port 9000");
