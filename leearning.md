@@ -93,3 +93,23 @@ Add timestamps for the schema
 (this is api level sanitiation before reaching into Db)
 Install Validator(npm install Validator)
 Explore validator functions and use validator functions for password, email,photourl
+
+NEVER Trust req.body
+
+validate data in req.body for put,patch,post(signup api)
+create helper function-util for validations
+install bcrypt pckage
+create passwordHash using bcrypt and save the user in db with encrypted password
+create login API
+compare passwords and throw Error if passwords don't match 
+
+AUTHENTICATION WORKS:
+
+install cookieparser & 
+send dummy cookie to user 
+create GET profile API and check if you got the cookie back (res.cookie)
+install jsonwebtoken
+In login API,After email and password validation  create a JWT token and send it to user in cookie
+read the cookie inside your profile API and find the logged in user 
+
+
