@@ -115,3 +115,7 @@ read the cookie inside your profile API and find the logged in user
 add the userAuth middleware in profileAPI and a new SendconnectionRequest API
 Set the expiry of JWT Token and cookies to 7d
 
+create UserSchema method to get jwt
+create userSchema method to comparepassword(passwordInuptbyuser)
+
+

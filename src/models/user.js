@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const validator = require('validator')
+const validator = require('validator');
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
     {
@@ -63,6 +65,36 @@ const userSchema = new mongoose.Schema(
     }
 },{timestamps:true} //createdAt and updatedAt will be automatically added to the document
 );
+
+//offloading commonly used methods in one helper functions ( these are all used allover the aplication)
+// we can attach method to schema to use it for user allover the application
+
+userSchema.methods.getJWT = async function(){
+    //here this refers whoever the user logs in . we cannot use arrow function it will collapse
+   const user = this;
+   
+   const token =  await jwt.sign({_id:user._id},"DevTinder@Secretkey$",{expiresIn:"7d"})
+
+   return token;
+
+}
+
+//we can offlod bcrypt comapre also 
+userSchema.methods.validatePassword = async function(passwordInputByUser){
+    //here this refers whoever the user logs in . we cannot use arrow function it will collapse
+   const user = this;
+   const passwordHash = user.password
+   
+   const isPasswordvalid =  await bcrypt.compare(passwordInputByUser,passwordHash);
+
+   return isPasswordvalid;
+
+   return token;
+
+}
+
+
+
 //schema is nothing but a modal 
 //nowe wil create a mongose model using this schema
 const userModel = mongoose.model('User', userSchema);

@@ -72,7 +72,7 @@ try{
          //we don't know whether its failing in userid or password
         throw new Error("Invalid credentials")
       }
-      const isPasswordValid = await bcrypt.compare(password,user.password)
+      const isPasswordValid = await user.validatePassword(password)
 
       if(isPasswordValid){
          /**
@@ -82,7 +82,7 @@ try{
           */
          //Create a JWT Token 
          //we are hiding this information (eg:user id in the token ) and also giving secret key
-         const token = await jwt.sign({_id:user._id},"DevTinder@Secretkey$",{expiresIn:"7d"});
+         const token = await user.getJWT();
          console.log(token,'token')
 
          /* * 
