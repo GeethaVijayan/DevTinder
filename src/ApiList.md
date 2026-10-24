@@ -1,0 +1,42 @@
+Dev Tinder API List
+
+Post /login API
+POst /logout API
+Post /Signin API
+
+PATCH /profile/edit  Profile
+Get /Profile/view   API (viewing profile details)
+patch/profile/password (forgotting password and adding new)
+
+/GEt   /feed API (which shows initial load of users)-gets you the user profiles on other platform
+/Get  /connection -   (what are all the matches i have)
+/Get  /request/received  -API (to see what are all request i have in my porifle (waiting to accept /review))
+
+
+
+
+
+
+Tinder API
+post /request/send/interested/:userID;   (like the profile -send the request)
+post /request/send/ignore/:userID;   (ignore/pass the profile -send the request)
+
+receive the api (accepting or reject)
+
+post /request/review/accepted/:userID;
+post /request/review/rejected/:userID;
+
+
+
+
+status
+ignore   -dislike(user ignore the profile)
+interested, -(user like the profile)
+Accepted   - both side it got accepted
+Rejected
+
+
+(This is small aplication so we are able to handle but for large apps we have so maany apis like 100)
+we cannot all 100/13 apis in a single file , we need to pass it router
+we create EXpress.Router and we need to handle routing in a proper way
+
