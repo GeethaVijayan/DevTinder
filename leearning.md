@@ -118,4 +118,9 @@ Set the expiry of JWT Token and cookies to 7d
 create UserSchema method to get jwt
 create userSchema method to comparepassword(passwordInuptbyuser)
 
-
+Explore tinder APis
+list out all existing apis you think wwe can add it in tinder
+group multiple routes under respective routers
+Read documentation for express.router
+create route folders for auth ,profiles, connection request
+Import the routes in app.js
