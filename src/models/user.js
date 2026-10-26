@@ -3,6 +3,27 @@ const validator = require('validator');
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt");
 
+
+/**
+ * Notes to understand 
+ * 
+ * 1. why schema ? why can't we create model directly 
+ * 
+ * Schema: Defines the structure of your documents.The schema can also define validation rules, required fields, default values, and more.
+Model: Provides methods to interact with your MongoDB collection.
+Database: Stores the actual data.
+
+const User = mongoose.model("User");
+
+This is not the normal way to create a new model. Mongoose expects a schema when registering a model that doesn't already exist.
+
+but in other languages theey use models direclty and in models they defiine structure . here we need schema becuase mongoose needs it 
+. we aare communicating through mogoose
+
+
+*/
+
+
 const userSchema = new mongoose.Schema(
     {
     firstName: {
@@ -40,12 +61,16 @@ const userSchema = new mongoose.Schema(
     },
     gender:{
         type: String,
-      //custom validation function
-        validate(value){
-            if(!['male','female','other'].includes(value)){
-                throw new Error("gender is not valid")
-            }
+        enum: {
+             values: ['male','female','others'],
+             message: `user is not valid gender type `  /**Refer valid enum */
         }
+      //custom validation function
+        // validate(value){
+        //     if(!['male','female','other'].includes(value)){
+        //         throw new Error("gender is not valid")
+        //     }
+        // }
     },
     photoUrl:{
         type: String,

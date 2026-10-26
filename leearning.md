@@ -124,3 +124,23 @@ group multiple routes under respective routers
 Read documentation for express.router
 create route folders for auth ,profiles, connection request
 Import the routes in app.js
+
+create POST/logout API
+create PATCH/profile/edit API
+create PATCH/profile/Password API = forgot password api
+make sure to validate all POST , PATCH api
+
+Create ConnectionRequest Schema
+Send Connection Request API
+proper Validation of data
+Think about all edge cases
+read about $or , Mongodb queries/operators ($and,$or,$gt)
+Schema.pre("save)
+
+Read about Index
+ Though index has benefits we cannot use it all fields since it will take up spaace in db an
+why do we need index
+advaantages and disadvantage of index
+//Read article about compund index(indexxing)
+index (1) =>a-z,0-9 ascending order
+index (-1) =>z-a,9-0 descending order

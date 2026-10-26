@@ -99,4 +99,13 @@ try{
 }
 })
 
+/**3.Logout API */
+//setting the cookie token = null and expiring cookie in logout time
+authRouter.post("/logout",async (req,res)=>{
+    res.cookie("token", null ,
+       {expiresIn : new Date(Date.now)}
+    )
+    res.status(200).send("user Logout successfully")
+})
+
 module.exports = authRouter;

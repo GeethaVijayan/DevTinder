@@ -8,16 +8,7 @@ Post /Signin API
 profile Router
 PATCH /profile/edit  Profile
 Get /Profile/view   API (viewing profile details)
-patch/profile/password (forgotting password and adding new)
-
-UserConnectionRequestRouter
-/GEt/user/feed API (which shows initial load of users)-gets you the user profiles on other platform
-/Get/user/connection -   (what are all the matches i have)
-/Get/user/request/received  -API (to see what are all request i have in my porifle (waiting to accept /review))
-
-
-
-
+patch/profile/password (forgotting password and adding new)   --//forgot password
 
 ConnectionRequestRouter
 Tinder API
@@ -29,6 +20,10 @@ post /request/review/accepted/:userID;
 post /request/review/rejected/:userID;
 
 
+UserConnectionRequestRouter
+/GEt/user/feed API (which shows initial load of users)-gets you the user profiles on other platform
+/Get/user/connection -   (what are all the matches i have)
+/Get/user/request/received  -API (to see what are all request i have in my porifle (waiting to accept /review))
 
 
 status
