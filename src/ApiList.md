@@ -14,10 +14,18 @@ ConnectionRequestRouter
 Tinder API
 post /request/send/interested/:userID;   (like the profile -send the request)
 post /request/send/ignore/:userID;   (ignore/pass the profile -send the request)
+==>we merged this 2 request and made it as 1
+status as dynamic [interested,ignore]
+/request/send/status/:userID; 
+
 
 receive the api (accepting or reject)
-post /request/review/accepted/:userID;
-post /request/review/rejected/:userID;
+post /request/review/accepted/:requestedID;
+post /request/review/rejected/:requestedID;
+
+==>single api post /request/review/:status/:requestedID;
+status[accepted,rejected]
+
 
 
 UserConnectionRequestRouter

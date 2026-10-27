@@ -2,7 +2,7 @@ const express = require("express");
 const {userAuth} = require("../middleware/auth") ;
 const ConnectionRequestModel = require("../models/connectionRequest");
 const User = require("../models/user")
-
+const ConnectionRequest = require("../models/connectionRequest");
 
 const connectionRequestRouter = express.Router();
 
@@ -45,7 +45,7 @@ try{
 
      const toUser = await User.findById(toUserId);
      if(!toUser){
-      res.status(400).send("user not found")
+      return res.status(404).send("user not found")
      }
 
 /**Validation check to find user exist in db or not */
@@ -72,13 +72,16 @@ try{
         {fromUserId:toUserId , toUserId:fromUserId}
       ]
      });
-       console.log(isExistingConnectionCheck,'isExisting')
+      console.log(isExistingConnectionCheck,'isExisting')
      if(isExistingConnectionCheck){
       return res.status(400).send({message : "connection Request already Present"})
      }
 
-    
+    console.log("Before save");
+
      const result =  await connectionRequest.save();
+console.log("After save:", result);
+
     if(!result){
       throw new Error("Connection Failed")
     }
@@ -92,6 +95,65 @@ try{
     error: err.message
   });
 }
+})
+
+connectionRequestRouter.post('/request/review/:status/:requestID',userAuth, async(req,res)=>{
+   console.log("inside review request");
+
+    //before writing any logic 
+    /** try to write it theory as steps
+     * 1. when loggedin user sends connectionrequest
+     * 2.review is something get all review accept and acknowledge whether its pass or fail based on like and dislike
+     * 3. first in my db cnnectionrequets i need to check what are all request there for me and 
+     * 4. in connectionRequest db i need to check what are all in and 
+     */
+
+
+    //Mahendra sent connection request to Diya
+    /**now its Diya bucket for review she has 2 choices like or dislike 
+     * first i will login to diyaa user aand get her buckert aand check wwho are all in for review
+     * 
+     * //mentor theory
+     * 1.Mahendra ==>Diyaa
+     * 
+     * Validation check
+     * 1.loggedInuser = toUser(diyaa)
+     * 2.status = interested
+     * 3.requestID should be valid
+     * 
+     */
+   
+
+    try{
+          const loggedInUser = req.user;
+ const {status,requestID} = req.params
+    const allowedReviewStatus = ['Accepted','Rejected'] ;
+    if(!allowedReviewStatus.includes(status)){
+      return res.status(400).json({message:"Status for review is invalid"})
+    }
+    
+    const validRequestId = await User.findOne({_id: requestID})
+      if(!validRequestId){
+        throw new Error("request id not valid")
+      }
+      const connectionReviewRequest = await ConnectionRequest.findOne({
+    _id: requestID,
+    toUserId: loggedInUser._id,
+    status: "interested"
+});
+        if(!connectionReviewRequest){
+           return res.status(404).json({message:"connection request not found"})
+        }
+
+        connectionReviewRequest.status = status;
+const data = await connectionReviewRequest.save();     
+ res.status(200).json({message:"Review Requested acknowledged"+ status, data})
+    }
+    catch(err){
+      return res.status(400).send("ERROR Message" + err)
+    }
+
+
 })
 
 
