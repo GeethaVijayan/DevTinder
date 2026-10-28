@@ -5,6 +5,8 @@ const app = express(); //new instance of express why we need express.json whenee
 const authRouter = require("../src/routes/auth.js");
 const connectionRequestRouter = require("../src/routes/connectionRequest.js");
 const profileRouter = require("../src/routes/profile.js");
+const userRouter = require("../src/routes/user.js");
+
 
 const cookieParser = require("cookie-parser") //it reads cookie or say parse the cookies nnut once we clear cookies it shows {} 
 
@@ -26,6 +28,8 @@ app.use(cookieParser()) ; //when  the request comes
 app.use("/",authRouter);
 app.use("/",profileRouter);
 app.use("/",connectionRequestRouter);
+app.use("/",userRouter);
+
 
 
 

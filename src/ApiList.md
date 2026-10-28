@@ -29,9 +29,15 @@ status[accepted,rejected]
 
 
 UserConnectionRequestRouter
-/GEt/user/feed API (which shows initial load of users)-gets you the user profiles on other platform
+/get/user/requests/received  -API (to see what are all request i have in my porifle (waiting to accept /review))
 /Get/user/connection -   (what are all the matches i have)
-/Get/user/request/received  -API (to see what are all request i have in my porifle (waiting to accept /review))
+
+/GEt/user/feed API (which shows initial load of users)-gets you the user profiles on other platform
+
+
+frst we need to find all conne
+
+
 
 
 status

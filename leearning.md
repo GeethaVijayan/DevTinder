@@ -125,6 +125,7 @@ Read documentation for express.router
 create route folders for auth ,profiles, connection request
 Import the routes in app.js
 
+
 create POST/logout API
 create PATCH/profile/edit API
 create PATCH/profile/Password API = forgot password api
@@ -148,3 +149,21 @@ index (-1) =>z-a,9-0 descending order
 ALWAYS THINK ABOUT CORNER CASES
 
 write code with proper vaalidations for Review RequestAPI POST
+
+Thought process of writing API
+
+POST -Sending data into DB
+GET - fetch data from DB
+ whenever we put anything in db attacker can came in between and attack
+ before putting anything in post call ( data santization is required we shouldn't put random data - multiple checks has to be run)
+
+
+We need to protect data 100%
+GET - we need to 100% sure data which we are sending to API is valid
+ Threat
+   Post - User can be maliciously enter wrong data in db
+   GET -users can give maliciious check we need to validate
+Read about Ref and populate and how we are creating relationhip between them https://mongoosejs.com/docs
+create GET Request api for receive(loggedin user can see what are all request he has received) with all checks
+
+create GET/user Connections

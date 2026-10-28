@@ -2,7 +2,6 @@ const express = require("express");
 const {userAuth} = require("../middleware/auth") ;
 const ConnectionRequestModel = require("../models/connectionRequest");
 const User = require("../models/user")
-const ConnectionRequest = require("../models/connectionRequest");
 
 const connectionRequestRouter = express.Router();
 
@@ -21,14 +20,18 @@ connectionRequestRouter.post('/request/send/:status/:toUserId',userAuth, async (
    *  2. if i dislike some person i will sent ignore (send connection from user A to B mentioning status dislike)
    * 
   */
-  const user = req.user;
+  const loggedInuser = req.user;
 try{
     const  toUserId = req.params.toUserId;
-    const  fromUserId = req.user._id;
+    const  fromUserId = loggedInuser._id;
     const  status = req.params.status;
 
-      
+      console.log("sending UserID", toUserId , "form", fromUserId, status)
     
+     const allowedStatus = ["interested","ignored"]
+     if(!allowedStatus.includes(status)){
+       return res.status(400).send("status is invalid")
+     }
     /**
      * i can retrieve user frstname from UserID
      */
@@ -37,17 +40,7 @@ try{
            toUserId : toUserId,
            status: status
      })
-     console.log(connectionRequest,'ConnectionReqquest')
-     const allowedStatus = ["interested","ignored"]
-     if(!allowedStatus.includes(status)){
-       return res.status(400).send("status is invalid")
-     }
-
-     const toUser = await User.findById(toUserId);
-     if(!toUser){
-      return res.status(404).send("user not found")
-     }
-
+  
 /**Validation check to find user exist in db or not */
      const toUserExist = await User.findById(toUserId);
     
@@ -74,19 +67,18 @@ try{
      });
       console.log(isExistingConnectionCheck,'isExisting')
      if(isExistingConnectionCheck){
+      console.log("Duplicate request found:", isExistingConnectionCheck._id);
       return res.status(400).send({message : "connection Request already Present"})
      }
 
     console.log("Before save");
 
      const result =  await connectionRequest.save();
-console.log("After save:", result);
-
     if(!result){
       throw new Error("Connection Failed")
     }
     res.json({
-      message: req.user.firstName + "has" + status + "the" + toUser.firstName})
+      message: req.user.firstName + "has" + status + "the" + toUserExist.firstName})
 
 }catch (err) {
   console.error("Connection request error:", err);
@@ -127,7 +119,7 @@ connectionRequestRouter.post('/request/review/:status/:requestID',userAuth, asyn
     try{
           const loggedInUser = req.user;
  const {status,requestID} = req.params
-    const allowedReviewStatus = ['Accepted','Rejected'] ;
+    const allowedReviewStatus = ['accepted','rejected'] ;
     if(!allowedReviewStatus.includes(status)){
       return res.status(400).json({message:"Status for review is invalid"})
     }
@@ -136,8 +128,9 @@ connectionRequestRouter.post('/request/review/:status/:requestID',userAuth, asyn
       if(!validRequestId){
         throw new Error("request id not valid")
       }
-      const connectionReviewRequest = await ConnectionRequest.findOne({
-    _id: requestID,
+      console.log(requestID,loggedInUser._id)
+      const connectionReviewRequest = await ConnectionRequestModel.findOne({
+    fromUserId: requestID,
     toUserId: loggedInUser._id,
     status: "interested"
 });
