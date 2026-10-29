@@ -167,3 +167,36 @@ Read about Ref and populate and how we are creating relationhip between them htt
 create GET Request api for receive(loggedin user can see what are all request he has received) with all checks
 
 create GET/user Connections
+
+Logic for get/feed Api 
+Explore logical query operators $and, $or , $nin, $ne 
+
+
+NOtes:
+
+Pagination -(it is something we will seet limit . suppose db has 1000 data we need to set limit for display 
+            first we will get 10 rows and then 10 rows . not eevrething shown at once)
+
+
+        /user/feed?page=1&limit=10; (this will give first 10 users) users from(1-10)  =>skip(0) and limt(10)   
+        /user/feed?page=2&limit=10;  users from 11-20    =>skip(10) and limt(10) 
+        /user/feed?page=3&limit=10;  users from 21-30    =>skip(20) and limt(10)
+ 
+  In mongodb we have 2 importaant function 
+   .skip() -how many documents you skip from starting
+   .limit() - means how maany documents we want
+
+   eg: skip(0) and limt(10)  it will give first 10 users from 1-10
+
+   we need to calculaate skip 
+
+      eg: page 2 limit 10 showws 11-20 we need to skip previiouss 10 sh
+        
+          skip  = (page - 1) *limit=  (2-1) *10 = shows in the paage 10 records 
+            eg: page 2 limit 10 
+                 skip(2-1)*10 = skip(10)
+                 -----
+                   page 3 limit 10 skips previous 20records
+                    skip(3-1)*10 = skip(20) skips previous 20records
+
+                    
