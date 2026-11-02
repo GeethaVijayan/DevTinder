@@ -1,16 +1,43 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+create React + vite project
+Remove unneccessary code and add hello world
 
-Currently, two official plugins are available:
+//Install tailwind in web project 
+1.npm install tailwindcss @tailwindcss/vite
+2.open vite.config.ts plugin 
+     tailwindcss(), inside import tailwindcss from '@tailwindcss/vite'
+     plugins along with react add tailwind
+     import tailwindcss from '@tailwindcss/vite'
+3. insde  src/index.scss    - @import "tailwindcss";
+4.src/main.tsx. -import './index.css'
+5.inside function app.jsx 
+/**
+use tailwind 
+className="min-h-screen bg-gray-900 flex items-center justify-center"
+eg:claassNaame : 
+ */
+Install tailwind version 4 to get l
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+--
+Install daisyUI & its relateed components
+Add navBar componnet to app.jsx
+Create a navBar.jsx to seperate Component file
+Install react Router Dom
+create BrowserRouter > Routes >    Route =/Body >RouteChildren
+Create an Outllet in your Body Component
+create a footer
 
-## React Compiler
+create a login Page
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+Componnet Level Design for DevTinder
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Body 
+  -NavBar
+  Route = / =>Feed Page
+  Route =/login =>login Page
+  Route =/connections  =>ConnectionsPage
+  Route =/profile =>profile Pge
