@@ -1,16 +1,17 @@
-import Footer from "./footer";
-import NavBar from "./navBar";
-
+import Footer from "./Footer";
+import NavBar from "./NavBar";
 import { Outlet } from "react-router-dom";
 
 const Body = () => {
   return (
-    <div>
-       <NavBar />
-       <Outlet /> 
-       <Footer /> 
+    <div className="flex min-h-screen flex-col">
+      <NavBar />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Body
+export default Body;
