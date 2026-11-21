@@ -124,16 +124,19 @@ connectionRequestRouter.post('/request/review/:status/:requestID',userAuth, asyn
       return res.status(400).json({message:"Status for review is invalid"})
     }
     
-    const validRequestId = await User.findOne({_id: requestID})
-      if(!validRequestId){
-        throw new Error("request id not valid")
-      }
-      console.log(requestID,loggedInUser._id)
-      const connectionReviewRequest = await ConnectionRequestModel.findOne({
-    fromUserId: requestID,
-    toUserId: loggedInUser._id,
-    status: "interested"
+    // const validRequestId = await User.findOne({_id: requestID})
+    //   if(!validRequestId){
+    //     throw new Error("request id not valid")
+    //   }
+    //   console.log(requestID,loggedInUser._id)
+    
+
+const connectionReviewRequest = await ConnectionRequestModel.findOne({
+  _id: requestID,
+  toUserId: loggedInUser._id,
+  status: "interested",
 });
+
         if(!connectionReviewRequest){
            return res.status(404).json({message:"connection request not found"})
         }

@@ -10,7 +10,7 @@ const userAuth = async (req,res,next) =>{
     const {token} = req.cookies;
 
     if(!token){
-       throw new Error("token is not valid/expired")
+        return res.status(401).send("Please Login first--token missing")
     }
           //after token validation it will directly give response not any boolean val so 
     const decodeMsg = await jwt.verify(token,"DevTinder@Secretkey$")

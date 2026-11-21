@@ -6,6 +6,7 @@ const authRouter = require("../src/routes/auth.js");
 const connectionRequestRouter = require("../src/routes/connectionRequest.js");
 const profileRouter = require("../src/routes/profile.js");
 const userRouter = require("../src/routes/user.js");
+const cors = require("cors"); //importing cors middleware
 
 
 const cookieParser = require("cookie-parser") //it reads cookie or say parse the cookies nnut once we clear cookies it shows {} 
@@ -21,8 +22,22 @@ connectDB()
     process.exit(1);
   });
 
+/**middleware to handle cors error */
+/**Though application is logged in successful we cannot save cookies because of security reasons 
+ * browser doesn't allow to save cookies from different domain,port due to security reasons so we need to whitelist them to use them in our application
+ * we are adding domain and credentials inside cors to set cookies in application 
+ * cors can whitelist origin and credentials to use cookies in application
+*/
+
+
+
 app.use(express.json()); //middleware to parse json data from request body(converts request json data into javasrcipt object for further use)
 app.use(cookieParser()) ; //when  the request comes
+
+app.use(cors({
+  origin: "http://localhost:5173", // must exactly match your frontend URL
+  credentials: true,               // needed because you're using cookies
+}));
 
 /**how to use router jus like how we use middleware same way we are using  */
 app.use("/",authRouter);

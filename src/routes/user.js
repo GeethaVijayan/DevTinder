@@ -21,7 +21,7 @@ try{
 
       const connectionRequest = await ConnectionRequestModel
                                  .find({toUserId: loggedInUser._id, status:"interested"})
-                                .populate("fromUserId","firstName lastName photoUrl,gender,age ") //(populate means we are filtering out the data we are showing we can write it in string or in belowcase array both are same)
+                                .populate("fromUserId", "firstName lastName photoUrl age gender about") //(populate means we are filtering out the data we are showing we can write it in string or in belowcase array both are same)
                                 //  .populate("fromUserId",["firstName","lastName"])  //(we are providing refeerence to user model and from there propulating first and lastname)
              
      res.json({message:"Data fetched Successfully",data:connectionRequest})
@@ -103,7 +103,7 @@ userRouter.get('/user/feed', userAuth, async(req,res)=>{
        *   eg: /user/feed?page=1&limit=10; - we need to show frst(0-10) 10 records in page 1/
        */
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 10;
+      let limit = parseInt(req.query.limit) || 10;
       /**we need to set condition for limit  */
 
       limit = limit > 50 ? 50: limit;
@@ -120,8 +120,7 @@ userRouter.get('/user/feed', userAuth, async(req,res)=>{
             {fromUserId: loggedInuser._id}
 
           ]
-      }).select("fromUserId toUserId").populate("fromUserId", "firstName")
-                                      .populate("toUserId", "firstName")
+      }).select("fromUserId toUserId")
 
        /**now connectionRequest will show request whom i sent or whom i received so these are the people i shouldn't see in my profile */
    /**so these are people i dont want to see in my feed */

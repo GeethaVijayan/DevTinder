@@ -19,7 +19,6 @@ authRouter.post("/signup", async (req, res) => {
   //whenever we do any db operations best practice is to add try catch block
   try {
     //1.validate signupData
-    console.log("Request body", req.body);
     validateSignupData(req);
     //2.Encrypt password
     const { firstName, lastName, email, password } = req.body;
@@ -31,11 +30,31 @@ authRouter.post("/signup", async (req, res) => {
       email,
       password: passwordHash,
     });
-    await user.save();
-    res.send("User added successfully");
+    const savedUser = await user.save();   // await is required, otherwise savedUser is a Promise
+
+    /** after profile created successfully i need to create and send token back so that frontend use it further  */
+    //Create a JWT Token
+    //we are hiding this information (eg:user id in the token ) and also giving secret key
+    const token = await savedUser.getJWT();
+
+    /* *
+     * 1. Add a token inside cookie and send as a response to the request
+     */
+    res.cookie("token", token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 8 * 3600000), // 8 hours
+    });
+
+    const userObj = savedUser.toObject();
+    delete userObj.password;               // never send the hash to the browser
+
+    // ONE response only, and only after the cookie is set
+    res.json({ message: "User added successfully", data: userObj });
   } catch (err) {
-    console.log("Error while saving user", err);
-    res.status(500).json({ message: "Internal server error" });
+    console.log("Error while creating user", err);
+    if (!res.headersSent) {                // guard, so a second response can never crash the server
+      res.status(500).json({ message: err.message || "Internal server error" });
+    }
   }
 });
 
@@ -86,8 +105,11 @@ try{
 
       
 
-         res.cookie("token",token,{httpOnly:true}, {expires:new Date(Date.now()+8*360000)});
-          res.send("Login successful")
+         res.cookie("token", token, {
+           httpOnly: true,
+           expires: new Date(Date.now() + 8 * 3600000), // 8 hours
+         });
+          res.send(user)
       } else{
         throw new Error("Password iss not matched")
       }   
